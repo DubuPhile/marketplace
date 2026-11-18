@@ -9,6 +9,7 @@ import {
   Mail,
   Send,
   Loader2,
+  ShoppingCart,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import type { Listing } from "@/types/listing";
@@ -160,6 +161,18 @@ export default function ListingDetailPage(params: id) {
             </div>
           </div>
           <Card>
+            <CardContent className="p-2">
+              <Button
+                type="submit"
+                onClick={handleCheckout}
+                className="w-full p-5"
+              >
+                <ShoppingCart />
+                Buy Now
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
             <CardContent className="p-5">
               <h2 className="font-bold">Description</h2>
               <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-slate-600">
@@ -168,9 +181,7 @@ export default function ListingDetailPage(params: id) {
               </p>
             </CardContent>
           </Card>
-          <Button type="submit" onClick={handleCheckout}>
-            Buy
-          </Button>
+
           <Card>
             <CardContent className="p-5">
               <div className="flex items-center gap-2">
