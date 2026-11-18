@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     const { error: orderError } = await supabase.from("orders").insert({
       listing_id: listing.id,
       stripe_session_id: session.id,
-      ammount: listing.price,
+      amount: listing.price,
       currency: "php",
       status: "pending",
     });
