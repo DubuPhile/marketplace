@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     // Fetch the actual listing and price from Supabase
     const { data: listing, error } = await supabase
       .from("listings")
-      .select("id, title, price")
+      .select("id, title, price,image_url")
       .eq("id", listingId)
       .single();
 
@@ -36,6 +36,7 @@ export async function POST(request: Request) {
             currency: "php",
             product_data: {
               name: listing.title,
+              images: listing.image_url,
             },
             unit_amount: Math.round(Number(listing.price) * 100),
           },
