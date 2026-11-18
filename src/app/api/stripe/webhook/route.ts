@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripes";
-import { supabase } from "@/lib/supabase/client";
 import Stripe from "stripe";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 
         if (session.payment_status !== "paid") break;
 
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
           .from("orders")
           .update({
             status: "paid",
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
       case "checkout.session.expired": {
         const session = event.data.object as Stripe.Checkout.Session;
 
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
           .from("orders")
           .update({
             status: "cancelled",

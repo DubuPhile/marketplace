@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripes";
 import { supabase } from "@/lib/supabase/client";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export async function POST(request: Request) {
   try {
@@ -51,7 +52,7 @@ export async function POST(request: Request) {
       cancel_url: `${baseUrl}/listing/${listing.id}`,
     });
 
-    const { error: orderError } = await supabase.from("orders").insert({
+    const { error: orderError } = await supabaseAdmin.from("orders").insert({
       listing_id: listing.id,
       stripe_session_id: session.id,
       amount: listing.price,
