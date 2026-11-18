@@ -4,11 +4,11 @@ import { supabase } from "@/lib/supabase/client";
 
 export async function POST(request: Request) {
   try {
-    const { listingId } = await request.json();
+    const { listingId, buyerEmail } = await request.json();
 
-    if (!listingId) {
+    if (!listingId || buyerEmail) {
       return NextResponse.json(
-        { error: "Listing ID is required" },
+        { error: "Listing ID and Email is required" },
         { status: 400 },
       );
     }
@@ -30,6 +30,7 @@ export async function POST(request: Request) {
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
+      customer_email: buyerEmail,
       line_items: [
         {
           price_data: {
@@ -53,11 +54,12 @@ export async function POST(request: Request) {
 
     const { error: orderError } = await supabase.from("orders").insert({
       listing_id: listing.id,
+      buyer_email: buyerEmail,
       stripe_session_id: session.id,
       amount: listing.price,
+      currency: "php",
       status: "pending",
     });
-
     if (orderError) {
       console.error("Order creation error:", orderError);
 

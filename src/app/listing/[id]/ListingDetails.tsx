@@ -100,6 +100,7 @@ export default function ListingDetailPage(params: id) {
         },
         body: JSON.stringify({
           listingId: id,
+          buyerEmail: buyerEmail,
         }),
       });
 
