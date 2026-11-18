@@ -21,8 +21,6 @@ export async function POST(request: Request) {
       .eq("id", listingId)
       .single();
 
-    console.log(listing);
-
     if (error || !listing) {
       return NextResponse.json({ error: "Listing not found" }, { status: 404 });
     }

@@ -25,6 +25,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
+  console.log(event.type);
+
   try {
     switch (event.type) {
       case "checkout.session.completed": {
