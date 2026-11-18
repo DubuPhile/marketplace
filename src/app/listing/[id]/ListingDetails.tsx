@@ -91,6 +91,30 @@ export default function ListingDetailPage(params: id) {
       </main>
     );
 
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          listingId: id,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <Link
@@ -144,6 +168,9 @@ export default function ListingDetailPage(params: id) {
               </p>
             </CardContent>
           </Card>
+          <Button type="submit" onClick={handleCheckout}>
+            Buy
+          </Button>
           <Card>
             <CardContent className="p-5">
               <div className="flex items-center gap-2">
