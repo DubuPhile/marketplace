@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!,
+      process.env.NEXT_STRIPE_WEBHOOK_SECRET!,
     );
   } catch (error) {
     console.error("Webhook signature error:", error);
@@ -30,12 +30,24 @@ export async function POST(request: Request) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
 
+        const buyerEmail = session.customer_details?.email;
+
+        if (!buyerEmail) {
+          console.error("Buyer email not found:", session.id);
+
+          return NextResponse.json(
+            { error: "Buyer email not found" },
+            { status: 400 },
+          );
+        }
+
         if (session.payment_status !== "paid") break;
 
         const { error } = await supabase
           .from("orders")
           .update({
             status: "paid",
+            buyer_email: buyerEmail,
             stripe_payment_intent_id:
               typeof session.payment_intent === "string"
                 ? session.payment_intent
