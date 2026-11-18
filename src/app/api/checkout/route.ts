@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     const { error: orderError } = await supabase.from("orders").insert({
       listing_id: listing.id,
       stripe_session_id: session.id,
-      amount: listing.price,
+      ammount: listing.price,
       currency: "php",
       status: "pending",
     });
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       await stripe.checkout.sessions.expire(session.id);
 
       return NextResponse.json(
-        { error: "Failed to create order" },
+        { error: "Failed to create order", orderError },
         { status: 500 },
       );
     }
