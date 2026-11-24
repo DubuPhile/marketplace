@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import ListingDetail from "./ListingDetails";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function ListingDetailPage({
   params,
@@ -7,7 +8,13 @@ export default function ListingDetailPage({
   params: Promise<{ id: string }>;
 }) {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <Spinner className="size-10 animate-spin text-gray-950" />
+        </div>
+      }
+    >
       <ListingContent params={params} />
     </Suspense>
   );
